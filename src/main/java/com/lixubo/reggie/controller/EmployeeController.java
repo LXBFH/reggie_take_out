@@ -80,12 +80,13 @@ public class EmployeeController {
 
     /**
      * 新增员工
+     *
      * @param employee
      * @return
      */
     @PostMapping
-    public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
-        log.info("新增员工，员工信息：{}",employee.toString());
+    public R<String> save(HttpServletRequest request, @RequestBody Employee employee) {
+        log.info("新增员工，员工信息：{}", employee.toString());
 
         //设置初始密码123456，需要进行md5加密处理
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
@@ -103,6 +104,7 @@ public class EmployeeController {
 
         return R.success("新增员工成功");
     }
+
     /**
      * 员工信息的分页查询
      *
@@ -120,23 +122,24 @@ public class EmployeeController {
         //构造条件构造器
         LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper();
         //添加过滤条件
-        queryWrapper.like(StringUtils.isNotEmpty(name),Employee::getName,name);
+        queryWrapper.like(StringUtils.isNotEmpty(name), Employee::getName, name);
         //添加排序条件
         queryWrapper.orderByDesc(Employee::getUpdateTime);
 
         //执行查询
-        employeeService.page(pageInfo,queryWrapper);
+        employeeService.page(pageInfo, queryWrapper);
 
         return R.success(pageInfo);
     }
 
     /**
      * 根据id修改员工信息
+     *
      * @param employee
      * @return
      */
     @PutMapping
-    public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
+    public R<String> update(HttpServletRequest request, @RequestBody Employee employee) {
         log.info(employee.toString());
 
         Long empId = (Long) request.getSession().getAttribute("employee");
@@ -148,17 +151,18 @@ public class EmployeeController {
 
     /**
      * 根据 id 查询员工信息
+     *
      * @param id
      * @return
      */
     @GetMapping("/{id}")
-    public R<Employee> getById(@PathVariable Long id){
+    public R<Employee> getById(@PathVariable Long id) {
         //@PathVariable 路径
         log.info("根据员工 id 查询员工信息 ");
         Employee employee = employeeService.getById(id);
-        if (employee != null){
+        if (employee != null) {
             return R.success(employee);
         }
-        return  R.error("没有查到员工信息");
+        return R.error("没有查到员工信息");
     }
 }
