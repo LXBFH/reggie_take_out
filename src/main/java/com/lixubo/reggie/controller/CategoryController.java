@@ -24,18 +24,20 @@ public class CategoryController {
 
     /**
      * 新增分类
+     *
      * @param category
      * @return
      */
     @PostMapping
-    public R<String> sava(@RequestBody Category category){
-        log.info("category:{}",category);
+    public R<String> sava(@RequestBody Category category) {
+        log.info("category:{}", category);
         categoryService.save(category);
         return R.success("新增分类成功");
     }
+
     @GetMapping("/page")
     public R<Page> page(int page, int pageSize) {
-        log.info("Page = {} , pageSize = {} ", page,pageSize);
+        log.info("Page = {} , pageSize = {} ", page, pageSize);
         //构造分页构造器
         Page pageInfo = new Page(page, pageSize);
 
@@ -45,8 +47,21 @@ public class CategoryController {
         queryWrapper.orderByAsc(Category::getSort);
 
         //执行查询
-        categoryService.page(pageInfo,queryWrapper);
+        categoryService.page(pageInfo, queryWrapper);
 
         return R.success(pageInfo);
+    }
+
+    /**
+     * 删除分类
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping
+    public R<String> delete(Long id) {
+        log.info("删除分类,id为:{}", id);
+        categoryService.removeById(id);
+        return R.success("删除分类成功");
     }
 }
