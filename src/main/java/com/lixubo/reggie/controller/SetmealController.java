@@ -93,8 +93,20 @@ public class SetmealController {
             }
             return setmealDto;
         }).collect(Collectors.toList());
-
         dtoPage.setRecords(list);
         return R.success(dtoPage);
+    }
+
+    /**
+     * 删除套餐 （可批量删除）
+     *
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    public R<String> delete(@RequestParam List<Long> ids) {
+        log.info("删除的套餐ids ：{}", ids);
+        setmealService.deleteWithDish(ids);
+        return R.success("套餐数据删除成功");
     }
 }
